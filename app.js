@@ -83,6 +83,59 @@ profileForm.addEventListener("submit",async(event)=>{
   finally{submit.disabled=false;submit.textContent="Save profile ↗";}
 });
 
+
+const verificationDialog=document.getElementById("verificationDialog");
+const verificationMessage=document.getElementById("verificationMessage");
+const verificationButton=document.getElementById("startVerificationBtn");
+
+async function getSumsubToken(){
+  const {data,error}=await supabaseClient.functions.invoke("sumsub-create-applicant",{body:{}});
+  if(error) throw new Error(error.message||"Could not contact Sumsub.");
+  if(!data||!data.accessToken) throw new Error(data?.error||"No temporary verification token was returned.");
+  return data.accessToken;
+}
+
+async function launchSumsub(){
+  if(!currentUser||!supabaseClient){
+    verificationMessage.textContent="Please log in before starting identity verification.";
+    verificationDialog.showModal();
+    return;
+  }
+  if(typeof snsWebSdk==="undefined"){
+    verificationMessage.textContent="The Sumsub interface has not loaded. Refresh the page and try again.";
+    verificationDialog.showModal();
+    return;
+  }
+  verificationButton.disabled=true;
+  verificationButton.textContent="Preparing…";
+  verificationMessage.textContent="Connecting securely to Sumsub Sandbox…";
+  try{
+    const accessToken=await getSumsubToken();
+    profileDialog.close();
+    verificationDialog.showModal();
+    document.getElementById("sumsub-websdk-container").replaceChildren();
+    const sdk=snsWebSdk.init(accessToken,()=>getSumsubToken())
+      .withConf({lang:"en",theme:"dark"})
+      .withOptions({addViewportTag:false,adaptIframeHeight:true})
+      .on("idCheck.onStepCompleted",()=>{verificationMessage.textContent="A verification step is complete. Please finish all required steps.";})
+      .on("idCheck.onApplicantSubmitted",()=>{verificationMessage.textContent="Submitted to Sumsub for review. Your REALCHECK badge will remain unverified until the result is confirmed by our backend.";})
+      .on("idCheck.onApplicantStatusChanged",()=>{verificationMessage.textContent="Sumsub has updated the review status. The final result will be confirmed securely by REALCHECK.";})
+      .on("idCheck.onError",()=>{verificationMessage.textContent="Sumsub reported an issue. Follow the instructions in its verification window and try again.";})
+      .onMessage((type)=>{if(type==="idCheck.onApplicantSubmitted")verificationMessage.textContent="Submitted to Sumsub for review. Your REALCHECK badge is not yet verified.";})
+      .build();
+    sdk.launch("#sumsub-websdk-container");
+    verificationMessage.textContent="Complete the identity document and liveness checks in the secure Sumsub window.";
+  }catch(error){
+    verificationMessage.textContent=error.message||"Could not start identity verification.";
+    verificationDialog.showModal();
+  }finally{
+    verificationButton.disabled=false;
+    verificationButton.textContent="Start identity verification ↗";
+  }
+}
+verificationButton.addEventListener("click",launchSumsub);
+verificationDialog.addEventListener("close",()=>document.getElementById("sumsub-websdk-container").replaceChildren());
+
 authForm.addEventListener("submit",async(event)=>{
   event.preventDefault();
   if(!supabaseClient){authMessage.textContent="Account service is not configured. Please refresh and try again.";return;}
