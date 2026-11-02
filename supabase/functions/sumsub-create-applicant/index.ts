@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
 
     // If the applicant already exists for this external user, find it instead of creating a duplicate.
     if (!applicantResponse.ok && applicantResponse.status === 409) {
-      const lookupPath = "/resources/applicants/-;externalUserId=" + encodeURIComponent(externalUserId);
+      const lookupPath = "/resources/applicants/-;externalUserId=" + encodeURIComponent(externalUserId) + "/one";
       const lookupResponse = await sumsubRequest("GET", lookupPath, "", appToken, secretKey);
       applicantData = await lookupResponse.json().catch(() => ({}));
       if (!lookupResponse.ok) {
@@ -97,9 +97,9 @@ Deno.serve(async (req) => {
     const applicantId = applicantData.id;
     if (!applicantId) return json({ error: "Sumsub did not return an applicant ID." }, 502);
 
-    const tokenPath = "/resources/accessTokens?userId=" + encodeURIComponent(externalUserId)
-      + "&levelName=" + encodeURIComponent(levelName) + "&ttlInSecs=600";
-    const tokenResponse = await sumsubRequest("POST", tokenPath, "", appToken, secretKey);
+    const tokenPath = "/resources/accessTokens/sdk";
+    const tokenBody = JSON.stringify({ userId: externalUserId, levelName, ttlInSecs: 600 });
+    const tokenResponse = await sumsubRequest("POST", tokenPath, tokenBody, appToken, secretKey);
     const tokenData = await tokenResponse.json().catch(() => ({}));
     if (!tokenResponse.ok || !tokenData.token) {
       return json({ error: "Sumsub could not issue a WebSDK access token.", providerStatus: tokenResponse.status }, 502);
