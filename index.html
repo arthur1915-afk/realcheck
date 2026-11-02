@@ -15,4 +15,24 @@
 <footer><a class="brand" href="#"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><span>© 2026 REALCHECK. Concept prototype.</span><div><a href="#safety">Privacy principles</a><a href="#how">How it works</a></div></footer>
 <dialog id="joinDialog" class="modal"><form method="dialog" class="modal-close"><button aria-label="Close">×</button></form><div class="modal-mark">R</div><div class="eyebrow">EARLY ACCESS</div><h2>Be among the first.</h2><p>Leave your email to register your interest. This prototype does not send or store your details.</p><form id="waitlistForm"><label for="email">Email address</label><input id="email" type="email" placeholder="you@example.com" required><button class="btn btn-primary btn-large full" type="submit">Register interest ↗</button></form><p class="form-message" id="formMessage" aria-live="polite"></p></dialog>
 <dialog id="infoDialog" class="modal"><form method="dialog" class="modal-close"><button aria-label="Close">×</button></form><div class="modal-mark">✓</div><div class="eyebrow">PROTOTYPE PREVIEW</div><h2 id="infoTitle">Coming soon</h2><p id="infoText">This feature is part of the planned REALCHECK product. Account creation, identity checks and messaging are not connected yet.</p><button class="btn btn-primary full" id="infoClose">Got it</button></dialog>
+<dialog id="authDialog" class="modal">
+  <form method="dialog" class="modal-close"><button aria-label="Close">×</button></form>
+  <div class="modal-mark">R</div>
+  <div class="eyebrow" id="authEyebrow">CREATE YOUR ACCOUNT</div>
+  <h2 id="authTitle">Join REALCHECK.</h2>
+  <p id="authIntro">Create an account to begin building a more trustworthy profile.</p>
+  <form id="authForm">
+    <label for="authName" id="authNameLabel">Display name</label>
+    <input id="authName" type="text" autocomplete="name" placeholder="Your name">
+    <label for="authEmail">Email address</label>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+    <label for="authPassword">Password</label>
+    <input id="authPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+    <button class="btn btn-primary btn-large full" id="authSubmit" type="submit">Create account ↗</button>
+  </form>
+  <p class="form-message" id="authMessage" aria-live="polite"></p>
+  <p class="auth-switch" id="authSwitchText">Already have an account? <button type="button" id="switchAuthMode" class="text-link">Log in</button></p>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script src="app.js"></script></body></html>
