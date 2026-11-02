@@ -2,3 +2,10 @@
 [hidden]{display:none!important}.auth-switch{margin-top:18px!important;text-align:center}.auth-switch button{border:0;background:transparent;padding:0;font:inherit;font-weight:800;color:var(--mint);cursor:pointer}.auth-switch button:hover{text-decoration:underline}.modal button:disabled{opacity:.65;cursor:wait}
 
 .profile-modal textarea{width:100%;resize:vertical;background:#081726;border:1px solid #304a61;border-radius:8px;padding:13px;color:white;font:inherit;font-size:13px;margin-bottom:12px}.profile-modal input{margin-bottom:12px}.profile-modal label{margin-top:12px}
+
+.verification-modal{width:min(96vw,760px);max-height:90vh;overflow:auto}
+#sumsub-websdk-container{width:100%;min-height:420px;background:#fff;border-radius:10px;overflow:hidden}
+#sumsub-websdk-container iframe{width:100%;border:0;min-height:600px}
+.verification-status{font-size:11px;color:#9eb0c0;text-align:center;margin:10px 0}
+#startVerificationBtn{border:1px solid #315267;margin-top:10px;color:var(--mint)}
+#startVerificationBtn:hover{background:#142b3a}
