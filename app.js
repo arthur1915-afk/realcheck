@@ -96,16 +96,18 @@ authForm.addEventListener("submit",async(event)=>{
       const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:displayName},emailRedirectTo:window.location.origin+window.location.pathname}});
       if(error)throw error;
       if(data.session){
-        authMessage.textContent="Account created. You're signed in.";
         updateAuthButton(data.session);
+        authDialog.close();
+        await openProfile();
       }else{
         authMessage.textContent="Account created. Check your email for the confirmation link before logging in.";
       }
     }else{
       const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
       if(error)throw error;
-      authMessage.textContent="You're signed in successfully.";
       updateAuthButton(data.session);
+      authDialog.close();
+      await openProfile();
     }
     authForm.reset();
   }catch(error){authMessage.textContent=error.message||"Something went wrong. Please try again.";}
