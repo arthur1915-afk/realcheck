@@ -50,6 +50,15 @@
   </form>
   <p class="form-message" id="profileMessage" aria-live="polite"></p>
 </dialog>
+<dialog id="verificationDialog" class="modal verification-modal">
+  <form method="dialog" class="modal-close"><button aria-label="Close">×</button></form>
+  <div class="eyebrow">SECURE IDENTITY CHECK</div>
+  <h2>Verify with Sumsub.</h2>
+  <p>Sumsub will securely guide you through the identity document and liveness checks. REALCHECK receives the result, not your raw ID images.</p>
+  <p id="verificationMessage" class="form-message" aria-live="polite">Preparing secure verification…</p>
+  <div id="sumsub-websdk-container"></div>
+</dialog>
+<script src="https://static.sumsub.com/idensic/static/sns-websdk-builder.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="app.js"></script></body></html>
