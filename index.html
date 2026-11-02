@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#081321"><meta name="description" content="REALCHECK helps people build safer connections through identity and real-person verification.">
 <title>REALCHECK — Know who's really there</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
 </head><body>
-<header class="topbar"><a class="brand" href="#"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><nav class="desktop-nav"><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#about">About</a></nav><div class="top-actions"><button class="btn btn-quiet" id="signInBtn">Log in</button><button class="btn btn-primary" id="joinBtn">Get started ↗</button></div></header>
+<header class="topbar"><a class="brand" href="#"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><nav class="desktop-nav"><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#about">About</a></nav><div class="top-actions"><button class="btn btn-quiet" id="profileBtn" hidden>My profile</button><button class="btn btn-quiet" id="signInBtn">Log in</button><button class="btn btn-primary" id="joinBtn">Get started ↗</button></div></header>
 <main>
 <section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="pulse"></span> A more trustworthy way to connect</div><h1>Know who's<br><em>really</em> there.</h1><p class="hero-lede">Online profiles are easy to create. Trust should be earned. REALCHECK is being built to help people verify identity and prove they're real before taking a connection further.</p><div class="hero-actions"><button class="btn btn-primary btn-large" id="heroJoin">Join the waitlist ↗</button><a class="text-link" href="#how">See how it works ↓</a></div><div class="trust-line"><span class="avatars"><i>J</i><i>M</i><i>A</i></span><span>Designed around <b>consent, privacy and trust</b></span></div></div>
 <div class="hero-visual"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="phone"><div class="phone-top"><span>9:41</span><span>● ● ●</span></div><div class="phone-brand"><span class="brand-mark small">R</span><span>REALCHECK</span><span class="menu-dots">•••</span></div><div class="profile-card"><div class="profile-photo"><div class="profile-initial">A</div><span class="verified-check">✓</span></div><div class="profile-name">Alex Morgan</div><div class="profile-sub">Identity checked · Demo profile</div><div class="verified-pill">✓ IDENTITY VERIFIED</div><div class="profile-divider"></div><div class="profile-row"><span>Real-person challenge</span><b class="status-done">Passed ✓</b></div><div class="profile-row"><span>Mutual connection</span><b class="status-pending">Awaiting you</b></div><button class="phone-cta" id="phoneDemo">View demo profile</button></div><div class="phone-foot"><span>⌂</span><span>◎</span><span>◇</span><span>◉</span></div></div><div class="float-note note-top"><span class="note-icon">✓</span><span><b>Identity-first</b><small>Privacy by design</small></span></div><div class="float-note note-bottom"><span class="note-icon shield">⬡</span><span><b>Mutual verification</b><small>Both people take part</small></span></div></div></section>
@@ -32,6 +32,23 @@
   </form>
   <p class="form-message" id="authMessage" aria-live="polite"></p>
   <p class="auth-switch" id="authSwitchText">Already have an account? <button type="button" id="switchAuthMode" class="text-link">Log in</button></p>
+</dialog>
+<dialog id="profileDialog" class="modal profile-modal">
+  <form method="dialog" class="modal-close"><button aria-label="Close">×</button></form>
+  <div class="modal-mark">R</div>
+  <div class="eyebrow">YOUR REALCHECK ACCOUNT</div>
+  <h2>Build your profile.</h2>
+  <p>Your profile helps other people know who they're connecting with. Only add information you're comfortable sharing.</p>
+  <form id="profileForm">
+    <label for="profileDisplayName">Display name</label>
+    <input id="profileDisplayName" type="text" maxlength="60" required>
+    <label for="profileUsername">Username</label>
+    <input id="profileUsername" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="e.g. alex_m" required>
+    <label for="profileBio">About you</label>
+    <textarea id="profileBio" maxlength="240" rows="3" placeholder="A short introduction (optional)"></textarea>
+    <button class="btn btn-primary btn-large full" id="saveProfileBtn" type="submit">Save profile ↗</button>
+  </form>
+  <p class="form-message" id="profileMessage" aria-live="polite"></p>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
