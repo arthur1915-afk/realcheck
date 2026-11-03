@@ -40,7 +40,7 @@ document.getElementById("signInBtn").addEventListener("click",async()=>{
   }
   openAuth("login");
 });
-document.getElementById("profileBtn").addEventListener("click",openProfile);
+document.getElementById("profileBtn").addEventListener("click",()=>{window.location.href="./profile.html";});
 document.getElementById("switchAuthMode").addEventListener("click",()=>setAuthMode(authMode==="signup"?"login":"signup"));
 document.getElementById("phoneDemo").addEventListener("click",()=>showInfo("Demo profile","This is a fictional example used to demonstrate how a verified profile could look. No real identity check has taken place."));
 document.getElementById("infoClose").addEventListener("click",()=>infoDialog.close());
@@ -170,7 +170,7 @@ authForm.addEventListener("submit",async(event)=>{
       if(data.session){
         updateAuthButton(data.session);
         authDialog.close();
-        await openProfile();
+        window.location.href="./profile.html";
       }else{
         authMessage.textContent="Account created. Check your email for the confirmation link before logging in.";
       }
@@ -179,7 +179,7 @@ authForm.addEventListener("submit",async(event)=>{
       if(error)throw error;
       updateAuthButton(data.session);
       authDialog.close();
-      await openProfile();
+      window.location.href="./profile.html";
     }
     authForm.reset();
   }catch(error){authMessage.textContent=error.message||"Something went wrong. Please try again.";}
