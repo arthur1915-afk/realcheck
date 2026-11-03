@@ -9,3 +9,15 @@
 .verification-status{font-size:11px;color:#9eb0c0;text-align:center;margin:10px 0}
 #startVerificationBtn{border:1px solid #315267;margin-top:10px;color:var(--mint)}
 #startVerificationBtn:hover{background:#142b3a}
+
+/* Dedicated account page */
+.account-page{min-height:100vh;background:radial-gradient(ellipse at 80% 10%,#123044 0,transparent 38%),var(--bg)}
+.account-main{max-width:1080px;margin:0 auto;padding:72px 28px 100px}
+.account-heading{margin-bottom:34px}.account-heading h1{font-size:clamp(42px,6vw,64px);margin:12px 0}.account-heading h1 span{color:var(--mint)}.account-heading p{color:var(--muted);font-size:14px}
+.account-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:20px;align-items:start}
+.account-card{background:#102236;border:1px solid #2b4357;border-radius:18px;padding:30px;box-shadow:0 22px 60px #0003}
+.card-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.account-card h2{font-size:23px;margin:8px 0 22px}
+.account-avatar{width:48px;height:48px;border:1px solid var(--mint);border-radius:50%;display:grid;place-items:center;color:var(--mint);font-size:20px;font-weight:800}
+.account-card label{display:block;font-size:12px;margin:17px 0 7px}.account-card input,.account-card textarea{width:100%;background:#081726;border:1px solid #304a61;border-radius:8px;padding:13px;color:white;font:inherit;font-size:14px;margin-bottom:8px}.account-card textarea{resize:vertical}.account-card button{margin-top:14px}
+.verification-card{position:sticky;top:105px}.verification-symbol{width:64px;height:64px;border:1px solid #456175;border-radius:50%;display:grid;place-items:center;font-size:31px;color:#b6c6d4;margin:25px 0 16px}.verification-symbol.is-verified{border-color:var(--mint);background:#8cf0c71a;color:var(--mint)}.verification-result{font-size:20px;font-weight:800}.verification-card>p{color:var(--muted);font-size:12px;line-height:1.8}.verification-foot{border-top:1px solid var(--line);padding-top:18px;margin-top:24px!important;font-size:10px!important}
+@media(max-width:760px){.account-main{padding:45px 18px 70px}.account-grid{grid-template-columns:1fr}.verification-card{position:static}.account-card{padding:23px}.account-page .topbar{padding:0 16px}}
