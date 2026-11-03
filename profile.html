@@ -10,7 +10,7 @@
 <main class="account-main">
 <div class="account-heading"><div class="eyebrow">YOUR REALCHECK ACCOUNT</div><h1>My profile<span>.</span></h1><p>Manage your details and see your identity verification status.</p></div>
 <section class="account-grid">
-<article class="account-card profile-details"><div class="card-heading"><div><div class="eyebrow">PROFILE DETAILS</div><h2>Your information</h2></div><span class="account-avatar" id="avatarInitial">R</span></div>
+<article class="account-card profile-details"><div class="card-heading"><div><div class="eyebrow">PROFILE DETAILS</div><h2>Your information</h2></div></div><div class="avatar-editor"><img id="avatarPreview" class="profile-avatar" alt="Your profile picture" src="icon.svg"><div class="avatar-actions"><label class="btn btn-quiet upload-photo-label" for="avatarInput">Upload profile photo</label><input id="avatarInput" class="file-input" type="file" accept="image/png,image/jpeg,image/webp"><button class="btn btn-quiet" id="removeAvatarBtn" type="button" hidden>Remove photo</button><p class="avatar-help">JPG, PNG or WebP · Maximum 5 MB</p></div></div>
 <form id="profileForm">
 <label for="displayName">Display name</label><input id="displayName" type="text" maxlength="60" required>
 <label for="username">Username</label><input id="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required>
