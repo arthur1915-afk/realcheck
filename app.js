@@ -55,7 +55,9 @@ function updateAuthButton(session){
 async function openProfile(){
   if(!currentUser||!supabaseClient)return;
   const message=document.getElementById("profileMessage");
+  const status=document.getElementById("verificationStatus");
   message.textContent="Loading your profile…";
+  status.textContent="Checking identity verification…";
   profileDialog.showModal();
   const {data,error}=await supabaseClient.from("profiles")
     .select("display_name,username,bio")
@@ -64,6 +66,23 @@ async function openProfile(){
   document.getElementById("profileDisplayName").value=data?.display_name||currentUser.user_metadata?.display_name||"";
   document.getElementById("profileUsername").value=data?.username||"";
   document.getElementById("profileBio").value=data?.bio||"";
+  const {data:verification,error:verificationError}=await supabaseClient
+    .from("identity_verifications")
+    .select("status,verified_at")
+    .eq("user_id",currentUser.id)
+    .eq("provider","sumsub")
+    .maybeSingle();
+  if(verificationError){
+    status.textContent="Identity verification: Status unavailable";
+  }else if(verification?.status==="verified"){
+    status.textContent="✓ Identity verified by Sumsub";
+  }else if(verification?.status==="rejected"){
+    status.textContent="Identity verification: Not approved";
+  }else if(verification){
+    status.textContent="Identity verification: Under review";
+  }else{
+    status.textContent="Identity verification: Not started";
+  }
   message.textContent="";
 }
 profileForm.addEventListener("submit",async(event)=>{
