@@ -10,12 +10,20 @@ function showStatus(status){
   else if(status){symbol.textContent="◷";result.textContent="Under review";description.textContent="Your identity check has been submitted and is awaiting a final result.";verifyBtn.hidden=true;}
   else{symbol.textContent="◉";result.textContent="Not verified yet";description.textContent="Complete an identity check to add a verified status to your REALCHECK account.";verifyBtn.hidden=false;}
 }
+function updateBioCount(){byId("bioCount").textContent=String(byId("bio").value.length);}
+byId("bio").addEventListener("input",updateBioCount);
 async function loadProfile(){
- const {data,error}=await client.from("profiles").select("display_name,username,bio,avatar_url").eq("id",user.id).maybeSingle();
+ const {data,error}=await client.from("profiles").select("display_name,username,bio,avatar_url,headline,location,occupation,interests,languages").eq("id",user.id).maybeSingle();
  if(error){byId("profileMessage").textContent="Could not load your profile: "+error.message;return;}
  byId("displayName").value=data?.display_name||user.user_metadata?.display_name||"";
  byId("username").value=data?.username||"";
  byId("bio").value=data?.bio||"";
+ byId("headline").value=data?.headline||"";
+ byId("location").value=data?.location||"";
+ byId("occupation").value=data?.occupation||"";
+ byId("interests").value=data?.interests||"";
+ byId("languages").value=data?.languages||"";
+ updateBioCount();
  const avatar=data?.avatar_url||"";
  if(avatar){byId("avatarPreview").src=avatar;byId("removeAvatarBtn").hidden=false;}
  else{byId("avatarPreview").src="icon.svg";byId("removeAvatarBtn").hidden=true;}
@@ -25,7 +33,7 @@ async function loadProfile(){
 }
 byId("profileForm").addEventListener("submit",async e=>{
  e.preventDefault();const btn=byId("saveBtn"),message=byId("profileMessage");btn.disabled=true;btn.textContent="Saving…";message.textContent="";
- try{const {error}=await client.from("profiles").update({display_name:byId("displayName").value.trim(),username:byId("username").value.trim().toLowerCase(),bio:byId("bio").value.trim()}).eq("id",user.id);if(error)throw error;message.textContent="Your profile has been saved.";}
+ try{const {error}=await client.from("profiles").update({display_name:byId("displayName").value.trim(),username:byId("username").value.trim().toLowerCase(),bio:byId("bio").value.trim(),headline:byId("headline").value.trim(),location:byId("location").value.trim(),occupation:byId("occupation").value.trim(),interests:byId("interests").value.trim(),languages:byId("languages").value.trim()}).eq("id",user.id);if(error)throw error;message.textContent="Your profile has been saved.";}
  catch(err){message.textContent=err.message||"Could not save your profile.";}
  finally{btn.disabled=false;btn.textContent="Save changes ↗";}
 });
