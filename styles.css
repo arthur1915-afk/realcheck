@@ -21,3 +21,12 @@
 .account-card label{display:block;font-size:12px;margin:17px 0 7px}.account-card input,.account-card textarea{width:100%;background:#081726;border:1px solid #304a61;border-radius:8px;padding:13px;color:white;font:inherit;font-size:14px;margin-bottom:8px}.account-card textarea{resize:vertical}.account-card button{margin-top:14px}
 .verification-card{position:sticky;top:105px}.verification-symbol{width:64px;height:64px;border:1px solid #456175;border-radius:50%;display:grid;place-items:center;font-size:31px;color:#b6c6d4;margin:25px 0 16px}.verification-symbol.is-verified{border-color:var(--mint);background:#8cf0c71a;color:var(--mint)}.verification-result{font-size:20px;font-weight:800}.verification-card>p{color:var(--muted);font-size:12px;line-height:1.8}.verification-foot{border-top:1px solid var(--line);padding-top:18px;margin-top:24px!important;font-size:10px!important}
 @media(max-width:760px){.account-main{padding:45px 18px 70px}.account-grid{grid-template-columns:1fr}.verification-card{position:static}.account-card{padding:23px}.account-page .topbar{padding:0 16px}}
+
+.avatar-editor{display:flex;align-items:center;gap:20px;padding:18px;background:#0b1a29;border:1px solid var(--line);border-radius:14px;margin:0 0 24px}
+.profile-avatar{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid #426b68;background:#14283a}
+.avatar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.upload-photo-label{display:inline-flex;align-items:center;cursor:pointer;border:1px solid #315267;border-radius:8px;padding:11px 14px;font-size:12px;font-weight:750}
+.upload-photo-label:hover{background:#142b3a}
+.file-input{position:absolute;width:1px!important;height:1px!important;opacity:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.avatar-help{width:100%;font-size:10px;color:var(--muted);margin:0!important}
+@media(max-width:480px){.avatar-editor{align-items:flex-start;gap:14px}.profile-avatar{width:82px;height:82px}.avatar-actions{gap:5px}}
