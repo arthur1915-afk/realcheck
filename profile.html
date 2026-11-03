@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081321"><title>My Profile — REALCHECK</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="account-page">
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><div class="top-actions"><a class="btn btn-quiet" href="./">← Back to home</a><button class="btn btn-quiet" id="logoutBtn">Log out</button></div></header>
+<main class="account-main">
+<div class="account-heading"><div class="eyebrow">YOUR REALCHECK ACCOUNT</div><h1>My profile<span>.</span></h1><p>Manage your details and see your identity verification status.</p></div>
+<section class="account-grid">
+<article class="account-card profile-details"><div class="card-heading"><div><div class="eyebrow">PROFILE DETAILS</div><h2>Your information</h2></div><span class="account-avatar" id="avatarInitial">R</span></div>
+<form id="profileForm">
+<label for="displayName">Display name</label><input id="displayName" type="text" maxlength="60" required>
+<label for="username">Username</label><input id="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required>
+<label for="bio">About you</label><textarea id="bio" maxlength="240" rows="4" placeholder="A short introduction (optional)"></textarea>
+<button class="btn btn-primary btn-large" id="saveBtn" type="submit">Save changes ↗</button>
+<p class="form-message" id="profileMessage" aria-live="polite"></p>
+</form></article>
+<aside class="account-card verification-card"><div class="eyebrow">IDENTITY & TRUST</div><h2>Identity verification</h2><div class="verification-symbol" id="verificationSymbol">◉</div><div class="verification-result" id="verificationResult">Checking status…</div><p id="verificationDescription">Your verification result is private to your account.</p><button class="btn btn-primary full" id="verifyBtn" hidden type="button">Start identity verification ↗</button><p class="verification-foot">Identity checks are handled securely by Sumsub. REALCHECK stores the verification result, not your raw identity documents.</p></aside>
+</section></main>
+<dialog id="verificationDialog" class="modal verification-modal"><form method="dialog" class="modal-close"><button aria-label="Close">×</button></form><div class="eyebrow">SECURE IDENTITY CHECK</div><h2>Verify with Sumsub.</h2><p>Complete the identity document and liveness checks in the secure Sumsub window.</p><p id="verificationMessage" class="form-message" aria-live="polite"></p><div id="sumsub-websdk-container"></div></dialog>
+<script src="https://static.sumsub.com/idensic/static/sns-websdk-builder.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="profile.js"></script>
+</body></html>
