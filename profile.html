@@ -24,6 +24,20 @@
 <button class="btn btn-primary btn-large" id="saveBtn" type="submit">Save changes ↗</button>
 <p class="form-message" id="profileMessage" aria-live="polite"></p>
 </form></article>
+<aside class="account-card profile-preview-card">
+<div class="eyebrow">MEMBER VIEW</div><h2>Profile preview</h2>
+<p class="preview-intro">This is how your profile details will appear to other members. Only you can see this preview.</p>
+<div class="member-preview">
+<div class="member-preview-top"><img id="previewAvatar" src="icon.svg" alt=""><div><div class="preview-name" id="previewName">Your name</div><div class="preview-username" id="previewUsername">@username</div></div><span id="previewVerified" class="preview-verified" hidden>✓ Verified</span></div>
+<div class="preview-headline" id="previewHeadline" hidden></div>
+<p class="preview-bio" id="previewBio">Your introduction will appear here.</p>
+<div class="preview-meta" id="previewLocation" hidden>⌖ <span></span></div>
+<div class="preview-meta" id="previewOccupation" hidden>▣ <span></span></div>
+<div class="preview-tags" id="previewInterests"></div>
+<div class="preview-languages" id="previewLanguages" hidden></div>
+</div>
+<p class="preview-footnote">Your identity documents and private verification details are never shown here.</p>
+</aside>
 <aside class="account-card verification-card"><div class="eyebrow">IDENTITY & TRUST</div><h2>Identity verification</h2><div class="verification-symbol" id="verificationSymbol">◉</div><div class="verification-result" id="verificationResult">Checking status…</div><p id="verificationDescription">Your verification result is private to your account.</p><button class="btn btn-primary full" id="verifyBtn" hidden type="button">Start identity verification ↗</button><p class="verification-foot">Identity checks are handled securely by Sumsub. REALCHECK stores the verification result, not your raw identity documents.</p></aside>
 </section></main>
 <dialog id="verificationDialog" class="modal verification-modal"><form method="dialog" class="modal-close"><button aria-label="Close">×</button></form><div class="eyebrow">SECURE IDENTITY CHECK</div><h2>Verify with Sumsub.</h2><p>Complete the identity document and liveness checks in the secure Sumsub window.</p><p id="verificationMessage" class="form-message" aria-live="polite"></p><div id="sumsub-websdk-container"></div></dialog>
