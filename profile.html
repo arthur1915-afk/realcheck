@@ -14,7 +14,13 @@
 <form id="profileForm">
 <label for="displayName">Display name</label><input id="displayName" type="text" maxlength="60" required>
 <label for="username">Username</label><input id="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required>
-<label for="bio">About you</label><textarea id="bio" maxlength="240" rows="4" placeholder="A short introduction (optional)"></textarea>
+<label for="headline">Profile headline</label><input id="headline" type="text" maxlength="80" placeholder="A few words that describe you">
+<label for="bio">About you</label><textarea id="bio" maxlength="500" rows="4" placeholder="Write a short introduction about yourself"></textarea><p class="field-hint"><span id="bioCount">0</span>/500 characters</p>
+<div class="profile-field-grid"><div><label for="location">Location</label><input id="location" type="text" maxlength="80" placeholder="City, country"></div><div><label for="occupation">Occupation</label><input id="occupation" type="text" maxlength="80" placeholder="What do you do?"></div></div>
+<label for="interests">Interests</label><input id="interests" type="text" maxlength="240" placeholder="Football, travel, technology">
+<p class="field-hint">Separate interests with commas.</p>
+<label for="languages">Languages</label><input id="languages" type="text" maxlength="160" placeholder="English, Luganda, Malay">
+<p class="field-hint">Separate languages with commas.</p>
 <button class="btn btn-primary btn-large" id="saveBtn" type="submit">Save changes ↗</button>
 <p class="form-message" id="profileMessage" aria-live="polite"></p>
 </form></article>
