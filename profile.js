@@ -5,13 +5,28 @@ const verificationMessage=byId("verificationMessage");
 const verifyBtn=byId("verifyBtn");
 function showStatus(status){
   const symbol=byId("verificationSymbol"),result=byId("verificationResult"),description=byId("verificationDescription");
-  if(status==="verified"){symbol.textContent="✓";symbol.classList.add("is-verified");result.textContent="Identity verified";description.textContent="Your identity check has been successfully completed. Your REALCHECK account is verified.";verifyBtn.hidden=true;}
-  else if(status==="rejected"){symbol.textContent="!";result.textContent="Verification not approved";description.textContent="Your latest identity check was not approved. You can review the process and try again.";verifyBtn.hidden=false;}
-  else if(status){symbol.textContent="◷";result.textContent="Under review";description.textContent="Your identity check has been submitted and is awaiting a final result.";verifyBtn.hidden=true;}
-  else{symbol.textContent="◉";result.textContent="Not verified yet";description.textContent="Complete an identity check to add a verified status to your REALCHECK account.";verifyBtn.hidden=false;}
+  if(status==="verified"){byId("previewVerified").hidden=false;symbol.textContent="✓";symbol.classList.add("is-verified");result.textContent="Identity verified";description.textContent="Your identity check has been successfully completed. Your REALCHECK account is verified.";verifyBtn.hidden=true;}
+  else if(status==="rejected"){byId("previewVerified").hidden=true;symbol.textContent="!";result.textContent="Verification not approved";description.textContent="Your latest identity check was not approved. You can review the process and try again.";verifyBtn.hidden=false;}
+  else if(status){byId("previewVerified").hidden=true;symbol.textContent="◷";result.textContent="Under review";description.textContent="Your identity check has been submitted and is awaiting a final result.";verifyBtn.hidden=true;}
+  else{byId("previewVerified").hidden=true;symbol.textContent="◉";result.textContent="Not verified yet";description.textContent="Complete an identity check to add a verified status to your REALCHECK account.";verifyBtn.hidden=false;}
 }
 function updateBioCount(){byId("bioCount").textContent=String(byId("bio").value.length);}
 byId("bio").addEventListener("input",updateBioCount);
+
+function updateProfilePreview(){
+ const val=id=>byId(id).value.trim();
+ byId("previewName").textContent=val("displayName")||"Your name";
+ byId("previewUsername").textContent=val("username")?"@"+val("username").replace(/^@/,""):"@username";
+ byId("previewHeadline").textContent=val("headline");byId("previewHeadline").hidden=!val("headline");
+ byId("previewBio").textContent=val("bio")||"Your introduction will appear here.";
+ const setMeta=(id,value)=>{const el=byId(id);el.querySelector("span").textContent=value;el.hidden=!value;};
+ setMeta("previewLocation",val("location"));setMeta("previewOccupation",val("occupation"));
+ const tags=val("interests").split(",").map(x=>x.trim()).filter(Boolean);
+ byId("previewInterests").replaceChildren(...tags.map(tag=>{const span=document.createElement("span");span.className="preview-tag";span.textContent=tag;return span;}));
+ const langs=val("languages");byId("previewLanguages").textContent=langs?"Languages · "+langs:"";byId("previewLanguages").hidden=!langs;
+}
+["displayName","username","headline","bio","location","occupation","interests","languages"].forEach(id=>byId(id).addEventListener("input",updateProfilePreview));
+
 async function loadProfile(){
  const {data,error}=await client.from("profiles").select("display_name,username,bio,avatar_url,headline,location,occupation,interests,languages").eq("id",user.id).maybeSingle();
  if(error){byId("profileMessage").textContent="Could not load your profile: "+error.message;return;}
@@ -24,9 +39,10 @@ async function loadProfile(){
  byId("interests").value=data?.interests||"";
  byId("languages").value=data?.languages||"";
  updateBioCount();
+ updateProfilePreview();
  const avatar=data?.avatar_url||"";
- if(avatar){byId("avatarPreview").src=avatar;byId("removeAvatarBtn").hidden=false;}
- else{byId("avatarPreview").src="icon.svg";byId("removeAvatarBtn").hidden=true;}
+ if(avatar){byId("previewAvatar").src=avatar;byId("avatarPreview").src=avatar;byId("removeAvatarBtn").hidden=false;}
+ else{byId("previewAvatar").src="icon.svg";byId("avatarPreview").src="icon.svg";byId("removeAvatarBtn").hidden=true;}
  const {data:verification,error:verificationError}=await client.from("identity_verifications").select("status,verified_at").eq("user_id",user.id).eq("provider","sumsub").maybeSingle();
  if(verificationError){byId("verificationResult").textContent="Status unavailable";byId("verificationDescription").textContent="We couldn't retrieve your verification status. Please refresh and try again.";verifyBtn.hidden=true;return;}
  showStatus(verification?.status||null);
@@ -52,7 +68,7 @@ byId("avatarInput").addEventListener("change",async event=>{
   const {data:publicData}=client.storage.from("profile-photos").getPublicUrl(path);
   const {error:updateError}=await client.from("profiles").update({avatar_url:publicData.publicUrl}).eq("id",user.id);
   if(updateError)throw updateError;
-  byId("avatarPreview").src=publicData.publicUrl+"?v="+Date.now();
+  byId("avatarPreview").src=publicData.publicUrl+"?v="+Date.now();byId("previewAvatar").src=publicData.publicUrl+"?v="+Date.now();
   byId("removeAvatarBtn").hidden=false;message.textContent="Profile photo updated successfully.";
  }catch(err){message.textContent=err.message||"Could not upload your photo. Check the storage setup and try again.";}
  finally{input.disabled=false;event.target.value="";}
@@ -67,7 +83,7 @@ byId("removeAvatarBtn").addEventListener("click",async()=>{
    if(index>=0){const path=decodeURIComponent(data.avatar_url.slice(index+marker.length).split("?")[0]);const {error}=await client.storage.from("profile-photos").remove([path]);if(error)throw error;}
   }
   const {error:updateError}=await client.from("profiles").update({avatar_url:null}).eq("id",user.id);if(updateError)throw updateError;
-  byId("avatarPreview").src="icon.svg";button.hidden=true;message.textContent="Profile photo removed.";
+  byId("avatarPreview").src="icon.svg";byId("previewAvatar").src="icon.svg";button.hidden=true;message.textContent="Profile photo removed.";
  }catch(err){message.textContent=err.message||"Could not remove photo.";}
  finally{button.disabled=false;}
 });
