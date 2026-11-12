@@ -20,15 +20,15 @@ function updateProfilePreview(){
  byId("previewHeadline").textContent=val("headline");byId("previewHeadline").hidden=!val("headline");
  byId("previewBio").textContent=val("bio")||"Your introduction will appear here.";
  const setMeta=(id,value)=>{const el=byId(id);el.querySelector("span").textContent=value;el.hidden=!value;};
- setMeta("previewLocation",val("location"));setMeta("previewOccupation",val("occupation"));
+ setMeta("previewLocation",byId("showLocation").checked?val("location"):"");setMeta("previewOccupation",val("occupation"));
  const tags=val("interests").split(",").map(x=>x.trim()).filter(Boolean);
  byId("previewInterests").replaceChildren(...tags.map(tag=>{const span=document.createElement("span");span.className="preview-tag";span.textContent=tag;return span;}));
  const langs=val("languages");byId("previewLanguages").textContent=langs?"Languages · "+langs:"";byId("previewLanguages").hidden=!langs;
 }
-["displayName","username","headline","bio","location","occupation","interests","languages"].forEach(id=>byId(id).addEventListener("input",updateProfilePreview));
+["displayName","username","headline","bio","location","occupation","interests","languages","showLocation"].forEach(id=>byId(id).addEventListener("input",updateProfilePreview));
 
 async function loadProfile(){
- const {data,error}=await client.from("profiles").select("display_name,username,bio,avatar_url,headline,location,occupation,interests,languages").eq("id",user.id).maybeSingle();
+ const {data,error}=await client.from("profiles").select("display_name,username,bio,avatar_url,headline,location,occupation,interests,languages,is_public,show_location").eq("id",user.id).maybeSingle();
  if(error){byId("profileMessage").textContent="Could not load your profile: "+error.message;return;}
  byId("displayName").value=data?.display_name||user.user_metadata?.display_name||"";
  byId("username").value=data?.username||"";
@@ -38,6 +38,8 @@ async function loadProfile(){
  byId("occupation").value=data?.occupation||"";
  byId("interests").value=data?.interests||"";
  byId("languages").value=data?.languages||"";
+ byId("profileDiscoverable").checked=data?.is_public!==false;
+ byId("showLocation").checked=data?.show_location===true;
  updateBioCount();
  updateProfilePreview();
  const avatar=data?.avatar_url||"";
@@ -49,7 +51,7 @@ async function loadProfile(){
 }
 byId("profileForm").addEventListener("submit",async e=>{
  e.preventDefault();const btn=byId("saveBtn"),message=byId("profileMessage");btn.disabled=true;btn.textContent="Saving…";message.textContent="";
- try{const {error}=await client.from("profiles").update({display_name:byId("displayName").value.trim(),username:byId("username").value.trim().toLowerCase(),bio:byId("bio").value.trim(),headline:byId("headline").value.trim(),location:byId("location").value.trim(),occupation:byId("occupation").value.trim(),interests:byId("interests").value.trim(),languages:byId("languages").value.trim()}).eq("id",user.id);if(error)throw error;message.textContent="Your profile has been saved.";}
+ try{const {error}=await client.from("profiles").update({display_name:byId("displayName").value.trim(),username:byId("username").value.trim().toLowerCase(),bio:byId("bio").value.trim(),headline:byId("headline").value.trim(),location:byId("location").value.trim(),occupation:byId("occupation").value.trim(),interests:byId("interests").value.trim(),languages:byId("languages").value.trim(),is_public:byId("profileDiscoverable").checked,show_location:byId("showLocation").checked}).eq("id",user.id);if(error)throw error;message.textContent="Your profile has been saved.";}
  catch(err){message.textContent=err.message||"Could not save your profile.";}
  finally{btn.disabled=false;btn.textContent="Save changes ↗";}
 });
