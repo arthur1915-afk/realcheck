@@ -24,6 +24,7 @@ function updateProfilePreview(){
  const tags=val("interests").split(",").map(x=>x.trim()).filter(Boolean);
  byId("previewInterests").replaceChildren(...tags.map(tag=>{const span=document.createElement("span");span.className="preview-tag";span.textContent=tag;return span;}));
  const langs=val("languages");byId("previewLanguages").textContent=langs?"Languages · "+langs:"";byId("previewLanguages").hidden=!langs;
+ const view=byId("openPublicProfile");view.href="member.html?username="+encodeURIComponent(val("username"));view.hidden=!val("username");
 }
 ["displayName","username","headline","bio","location","occupation","interests","languages","showLocation"].forEach(id=>byId(id).addEventListener("input",updateProfilePreview));
 
