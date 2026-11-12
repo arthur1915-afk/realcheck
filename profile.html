@@ -14,6 +14,7 @@
 <form id="profileForm">
 <label for="displayName">Display name</label><input id="displayName" type="text" maxlength="60" required>
 <label for="username">Username</label><input id="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required>
+<div class="privacy-panel"><div class="privacy-panel-title">PROFILE PRIVACY</div><label class="privacy-toggle"><span><b>Discoverable profile</b><small>Allow signed-in REALCHECK members to find and view your profile.</small></span><input id="profileDiscoverable" type="checkbox" checked></label><label class="privacy-toggle"><span><b>Show my location</b><small>Display your location on your member profile.</small></span><input id="showLocation" type="checkbox"></label></div>
 <label for="headline">Profile headline</label><input id="headline" type="text" maxlength="80" placeholder="A few words that describe you">
 <label for="bio">About you</label><textarea id="bio" maxlength="500" rows="4" placeholder="Write a short introduction about yourself"></textarea><p class="field-hint"><span id="bioCount">0</span>/500 characters</p>
 <div class="profile-field-grid"><div><label for="location">Location</label><input id="location" type="text" maxlength="80" placeholder="City, country"></div><div><label for="occupation">Occupation</label><input id="occupation" type="text" maxlength="80" placeholder="What do you do?"></div></div>
