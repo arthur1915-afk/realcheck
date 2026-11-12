@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#081321"><title>Member Profile — REALCHECK</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"></head>
+<body class="account-page member-page">
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><div class="top-actions"><a class="btn btn-quiet" href="./profile.html">My profile</a><a class="btn btn-quiet" href="./">Home</a></div></header>
+<main class="account-main"><div class="account-heading"><div class="eyebrow">REALCHECK MEMBER</div><h1>Member profile<span>.</span></h1><p>Public information shared by this member.</p></div>
+<section class="account-card public-profile-card" id="publicProfile" hidden>
+<div class="public-profile-header"><img id="memberAvatar" class="public-profile-avatar" src="icon.svg" alt=""><div><div class="public-profile-name" id="memberName"></div><div class="public-profile-username" id="memberUsername"></div><div class="public-profile-verified" id="memberVerified" hidden>✓ Identity verified</div></div></div>
+<div class="public-profile-headline" id="memberHeadline" hidden></div><p class="public-profile-bio" id="memberBio"></p>
+<div class="public-profile-section" id="memberDetails" hidden><h3>ABOUT</h3><div class="public-profile-meta" id="memberLocation" hidden></div><div class="public-profile-meta" id="memberOccupation" hidden></div></div>
+<div class="public-profile-section" id="memberInterestSection" hidden><h3>INTERESTS</h3><div class="preview-tags" id="memberInterests"></div></div>
+<div class="public-profile-section" id="memberLanguageSection" hidden><h3>LANGUAGES</h3><div class="public-profile-meta" id="memberLanguages"></div></div>
+</section><section class="account-card member-error" id="memberMessage" aria-live="polite">Loading member profile…</section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="member.js"></script></body></html>
