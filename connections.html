@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081321"><title>My Connections — REALCHECK</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="account-page connections-page">
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">R</span> REAL<span>CHECK</span></a>
+<div class="top-actions"><a class="btn btn-quiet" href="./discover.html">Discover</a><a class="btn btn-quiet" href="./requests.html">Requests</a><a class="btn btn-quiet" href="./profile.html">My profile</a></div></header>
+<main class="account-main connections-main">
+<div class="connections-hero"><div><div class="eyebrow"><span class="pulse"></span> YOUR REALCHECK NETWORK</div><h1>Your connections<span>.</span></h1><p>People you've both agreed to connect with. Your network is private to your account.</p></div><a class="btn btn-primary" href="./discover.html">Discover members ↗</a></div>
+<section class="connections-summary"><div><span class="connections-summary-icon">◎</span><div><strong id="connectionCount">—</strong><span>Accepted connections</span></div></div><p>Only mutually accepted connections appear here.</p></section>
+<section class="connections-content"><div class="connections-section-heading"><div><span class="connections-kicker">YOUR NETWORK</span><h2>People you're connected with</h2></div><a href="./requests.html">Manage requests ↗</a></div>
+<p id="connectionsMessage" class="form-message" aria-live="polite">Loading your connections…</p>
+<div id="connectionsList" class="connections-list" aria-live="polite"></div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="connections.js"></script>
+</body></html>
