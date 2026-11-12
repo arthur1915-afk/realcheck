@@ -28,5 +28,9 @@ async function loadMember(){
  setText("memberLanguages",p.languages||"");
  byId("memberLanguageSection").hidden=!p.languages;
  byId("memberMessage").hidden=true;byId("publicProfile").hidden=false;
+ byId("sendConnectionBtn").hidden=p.id===sessionData.session.user.id;
+ byId("sendConnectionBtn").dataset.username=p.username||username;
 }
 loadMember();
+
+byId("sendConnectionBtn").addEventListener("click",async()=>{const button=byId("sendConnectionBtn");button.disabled=true;byId("connectionMessage").textContent="Sending request…";try{const {data,error}=await client.rpc("send_realcheck_connection_request",{p_username:button.dataset.username});if(error)throw error;button.textContent=data==="connected"?"Already connected":data==="pending"?"Request already pending":"Request sent ✓";byId("connectionMessage").textContent=data==="sent"?"Your connection request has been sent.":data==="pending"?"A connection request is already pending.":"You are already connected."; }catch(e){byId("connectionMessage").textContent=e.message||"Could not send request.";button.disabled=false;}});
