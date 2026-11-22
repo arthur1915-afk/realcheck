@@ -145,7 +145,40 @@ begin
     update public.realcheck_pose_submissions
       set evaluation_status = 'expired', review_status = 'denied'
       where attempt_id = v_attempt.id and review_status = 'pending';
-    raise exception 'The 20-second challenge window has expired.';
+    if v_attempt.attempt_number >= 3 then
+      update public.realcheck_pose_sessions set status = 'failed', completed_at = now()
+        where id = v_session.id;
+      return jsonb_build_object('status','failed','message','The final challenge attempt expired. Chat remains locked.');
+    end if;
+
+    select * into v_next_prompt
+    from public.realcheck_pose_prompts p
+    where p.enabled
+      and not exists (
+        select 1 from public.realcheck_pose_attempts old
+        where old.session_id = v_session.id and old.prompt_id = p.id
+      )
+    order by random()
+    limit 1;
+
+    if not found then
+      update public.realcheck_pose_sessions set status = 'failed', completed_at = now()
+        where id = v_session.id;
+      return jsonb_build_object('status','failed','message','No unused challenge prompts remain. Chat remains locked.');
+    end if;
+
+    update public.realcheck_pose_sessions
+      set current_attempt = v_attempt.attempt_number + 1
+      where id = v_session.id;
+
+    insert into public.realcheck_pose_attempts
+      (session_id, attempt_number, prompt_id, prompt_text, status, started_at, expires_at)
+    values
+      (v_session.id, v_attempt.attempt_number + 1, v_next_prompt.id,
+       v_next_prompt.prompt_text, 'active', now(), now() + interval '20 seconds');
+
+    return jsonb_build_object('status','next_attempt','attempt',v_attempt.attempt_number + 1,
+      'prompt',v_next_prompt.prompt_text,'message','The previous attempt expired. A new shared prompt is ready.');
   end if;
 
   select * into v_other_submission
