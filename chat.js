@@ -18,7 +18,7 @@ async function loadChat(){
  const {data:conversation,error:conversationError}=await supabaseClient.from("realcheck_conversations").select("id,participant_a,participant_b").eq("id",conversationId).maybeSingle();
  if(conversationError||!conversation){status("This conversation is unavailable. You must still be connected to this member.");return;}
  const otherId=conversation.participant_a===currentUserId?conversation.participant_b:conversation.participant_a;
- const {data:profile}=await supabaseClient.from("profiles").select("display_name,username").eq("id",otherId).maybeSingle();
+ const {data:profile}=await supabaseClient.rpc("get_realcheck_conversation_member",{p_conversation_id:conversationId});
  el("chatMemberName").textContent=profile?.display_name||"REALCHECK member";
  el("chatMemberUsername").textContent=profile?.username?"@"+profile.username:"";
  const {data:messages,error}=await supabaseClient.from("realcheck_messages").select("id,conversation_id,sender_id,body,created_at").eq("conversation_id",conversationId).order("created_at",{ascending:true}).limit(500);
