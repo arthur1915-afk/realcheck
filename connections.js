@@ -22,7 +22,8 @@ async function loadConnections(){
   if(person.is_verified===true){const verified=document.createElement("span");verified.className="preview-verified";verified.textContent="✓ Verified";info.append(verified);}
   const actions=document.createElement("div");actions.className="connection-member-actions";
   const profile=document.createElement("a");profile.className="btn btn-quiet";profile.href="member.html?username="+encodeURIComponent(person.username||"");profile.textContent="View profile ↗";
-  actions.append(profile);card.append(img,info,actions);root.append(card);
+  const message=document.createElement("button");message.className="btn btn-primary";message.type="button";message.textContent="Message";message.addEventListener("click",async()=>{message.disabled=true;message.textContent="Opening…";const {data:conversationId,error:openError}=await client.rpc("open_realcheck_conversation",{p_username:person.username});if(openError){message.disabled=false;message.textContent="Try again";showMessage(openError.message||"Could not open conversation.");return;}location.href="chat.html?id="+encodeURIComponent(conversationId);});
+  actions.append(profile,message);card.append(img,info,actions);root.append(card);
  });
 }
 loadConnections();
