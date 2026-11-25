@@ -134,3 +134,22 @@
 .conversation-list{display:grid;gap:10px;margin-top:20px}.conversation-item{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #294257;border-radius:13px;background:#0a1928;transition:border-color .2s}.conversation-item:hover{border-color:#477866}.conversation-avatar{width:54px;height:54px;object-fit:cover;border-radius:50%;border:2px solid #34576a}.conversation-info{flex:1;min-width:0}.conversation-info strong{font-size:13px}.conversation-info p{font-size:11px;color:#9fb1c0;margin:3px 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.conversation-item time{font-size:10px;color:#8298aa}
 .chat-main{max-width:850px;padding-top:40px}.chat-card{padding:0;overflow:hidden}.chat-header{display:flex;align-items:center;gap:17px;padding:22px 25px;border-bottom:1px solid var(--line)}.chat-header>a{font-size:25px;color:var(--mint)}.chat-header h1{font-size:24px;letter-spacing:-.04em;margin:4px 0}.chat-header p{font-size:11px;color:var(--muted);margin:0}.chat-card>#chatStatus{padding:0 22px;margin:10px 0}.chat-messages{height:min(58vh,560px);min-height:300px;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:12px;background:#0a1928}.chat-bubble{max-width:min(78%,560px);padding:11px 14px;border-radius:14px;background:#193047;border:1px solid #2d485f;overflow-wrap:anywhere}.chat-bubble.mine{align-self:flex-end;background:#174536;border-color:#2b6b53;border-bottom-right-radius:4px}.chat-bubble.theirs{align-self:flex-start;border-bottom-left-radius:4px}.chat-bubble p{font-size:13px;line-height:1.65;margin:0;white-space:pre-wrap}.chat-bubble time{display:block;text-align:right;font-size:9px;color:#a6b9c8;margin-top:5px}.chat-compose{display:flex;align-items:flex-end;gap:12px;padding:18px 20px;background:#102236;border-top:1px solid var(--line)}.chat-compose textarea{flex:1;resize:vertical;min-height:48px;max-height:140px;background:#081726;border:1px solid #304a61;border-radius:10px;padding:13px;color:white;font:inherit;font-size:13px}.chat-compose button{min-width:88px}.chat-footnote{font-size:10px;color:#8298aa;padding:0 20px 17px;margin:0;background:#102236}
 @media(max-width:560px){.messages-heading{align-items:flex-start;flex-direction:column}.chat-main{padding:22px 10px 60px}.chat-header{padding:18px}.chat-messages{padding:14px;height:58vh}.chat-compose{padding:13px;gap:8px}.chat-compose button{min-width:68px;padding:11px}.chat-bubble{max-width:88%}}
+
+
+/* Mutual photo challenge */
+.pose-card{max-width:720px;margin:48px auto;padding:clamp(22px,5vw,42px)}
+.pose-card h1{font-size:clamp(32px,6vw,48px);margin:10px 0}
+.pose-card h1 span{color:var(--accent)}
+.pose-intro,.pose-help{color:var(--muted);font-size:13px;line-height:1.7}
+.pose-status{margin:22px 0;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#102236;color:#d7e5ef;font-size:13px;line-height:1.6}
+.pose-attempt{display:flex;align-items:center;justify-content:space-between;margin:24px 0 12px;color:#9bb1c4;font-size:11px;letter-spacing:.12em}
+.pose-attempt strong{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:2px solid #48c99a;color:#fff;font-size:20px;letter-spacing:0}
+.pose-card h2{font-size:22px;margin:16px 0 8px}
+#poseVideo{display:block;width:100%;max-height:420px;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#07111d;border:1px solid var(--line);transform:scaleX(-1);margin:18px 0}
+.pose-actions{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+#otherSubmissionPhoto{display:block;width:100%;max-height:480px;object-fit:contain;background:#07111d;border:1px solid var(--line);border-radius:14px;margin:18px 0}
+.pose-back{margin-top:20px}
+.chat-verification-gate{margin:18px 22px 24px;padding:24px;border:1px solid #31516a;border-radius:14px;background:linear-gradient(145deg,#10283a,#0b1a29)}
+.chat-verification-gate h2{font-size:22px;margin:12px 0}
+.chat-verification-gate p{color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 18px}
+@media(max-width:560px){.pose-card{margin:20px 10px;padding:22px 16px}.pose-actions{flex-direction:column}.pose-actions .btn{width:100%;text-align:center}.chat-verification-gate{margin:14px;padding:18px}}
