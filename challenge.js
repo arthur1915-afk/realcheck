@@ -18,7 +18,16 @@ async function loadAttempt(){
  if(data.status==="failed"){
   stopCamera();hideSections();message(data.message||"The challenge is complete. Chat remains locked.");return;
  }
+ if(data.status==="waiting_for_partner"){
+  attempt=data;stopCamera();hideSections();el("poseWaiting").hidden=false;
+  el("poseWaiting").querySelector("h2").textContent="Waiting for your connection";
+  el("poseWaiting").querySelector("p").textContent="You're ready. The 20-second timer will begin only when both participants have opened this attempt.";
+  message(data.message||"Waiting for the other participant to join.");
+  return;
+ }
  attempt=data;
+ el("poseWaiting").querySelector("h2").textContent="Waiting for the other review";
+ el("poseWaiting").querySelector("p").textContent="Your photo has been submitted. Chat remains locked until both people approve the other's photo.";
  el("poseAttempt").textContent="ATTEMPT "+data.attempt+" OF 3";
  el("posePrompt").textContent=data.prompt;
  const remaining=Math.max(0,Math.ceil((new Date(data.expires_at).getTime()-Date.now())/1000));
@@ -51,7 +60,8 @@ async function startCamera(){
 }
 
 async function refreshState(){
- if(!user||!attempt)return;
+ if(!user)return;
+ if(!attempt){await loadAttempt();return;}
  const {data:session,error}=await client.from("realcheck_pose_sessions").select("status,current_attempt").eq("conversation_id",conversationId).maybeSingle();
  if(error)throw error;
  if(session?.status==="passed"){await loadAttempt();return;}
