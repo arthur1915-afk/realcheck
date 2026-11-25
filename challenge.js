@@ -2,7 +2,7 @@ const el=id=>document.getElementById(id);
 const client=window.supabase?.createClient(window.REALCHECK_SUPABASE_CONFIG?.url,window.REALCHECK_SUPABASE_CONFIG?.publishableKey);
 const conversationId=new URLSearchParams(location.search).get("id");
 const bucket="realcheck-challenge-photos";
-let user=null,attempt=null,stream=null,timerHandle=null,pollHandle=null,reviewing=false;
+let user=null,attempt=null,stream=null,timerHandle=null,pollHandle=null,reviewing=false,pendingUpload=null;
 
 function message(text){el("poseStatus").textContent=text;}
 function stopCamera(){if(stream){stream.getTracks().forEach(track=>track.stop());stream=null;}el("poseVideo").srcObject=null;}
@@ -73,25 +73,33 @@ async function refreshState(){
 }
 
 el("capturePose").addEventListener("click",async()=>{
- const button=el("capturePose");if(!stream||!attempt||button.disabled)return;
- if(Date.now()>=new Date(attempt.expires_at).getTime()){message("Time expired. Preparing the next attempt…");await refreshState();return;}
- button.disabled=true;button.textContent="Submitting…";
+ const button=el("capturePose");if(button.disabled||!attempt)return;
+ button.disabled=true;button.textContent=pendingUpload?"Retrying upload…":"Submitting…";
  try{
-  const video=el("poseVideo"),canvas=el("poseCanvas");
-  if(!video.videoWidth)throw new Error("Camera is not ready. Please wait a moment.");
-  const width=Math.min(video.videoWidth,1280),height=Math.round(video.videoHeight*(width/video.videoWidth));
-  canvas.width=width;canvas.height=height;canvas.getContext("2d").drawImage(video,0,0,width,height);
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",0.84));
-  if(!blob)throw new Error("Could not capture the photo.");
-  const path=user.id+"/"+attempt.session_id+"/"+attempt.attempt_id+"/"+crypto.randomUUID()+".jpg";
-  const {data:submissionId,error:registerError}=await client.rpc("register_realcheck_pose_submission",{p_attempt_id:attempt.attempt_id,p_photo_path:path});
-  if(registerError)throw registerError;
-  const {error:uploadError}=await client.storage.from(bucket).upload(path,blob,{contentType:"image/jpeg",upsert:false});
+  if(!pendingUpload){
+   if(!stream)throw new Error("Camera is not ready. Please allow camera access and try again.");
+   if(Date.now()>=new Date(attempt.expires_at).getTime()){message("Time expired. Preparing the next attempt…");await refreshState();return;}
+   const video=el("poseVideo"),canvas=el("poseCanvas");
+   if(!video.videoWidth)throw new Error("Camera is not ready. Please wait a moment.");
+   const width=Math.min(video.videoWidth,1280),height=Math.round(video.videoHeight*(width/video.videoWidth));
+   canvas.width=width;canvas.height=height;canvas.getContext("2d").drawImage(video,0,0,width,height);
+   const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",0.84));
+   if(!blob)throw new Error("Could not capture the photo.");
+   const path=user.id+"/"+attempt.session_id+"/"+attempt.attempt_id+"/"+crypto.randomUUID()+".jpg";
+   const {error:registerError}=await client.rpc("register_realcheck_pose_submission",{p_attempt_id:attempt.attempt_id,p_photo_path:path});
+   if(registerError)throw registerError;
+   // Keep the same path and captured blob so a transient storage failure can be retried
+   // without creating a duplicate submission row or taking another photo.
+   pendingUpload={path,blob,attemptId:attempt.attempt_id};
+  }
+  if(pendingUpload.attemptId!==attempt.attempt_id)throw new Error("This photo belongs to an earlier attempt. Refresh the challenge before continuing.");
+  const {error:uploadError}=await client.storage.from(bucket).upload(pendingUpload.path,pendingUpload.blob,{contentType:"image/jpeg",upsert:false});
   if(uploadError)throw uploadError;
+  pendingUpload=null;
   stopCamera();message("Photo submitted. Waiting for your connection's photo…");hideSections();el("poseWaiting").hidden=false;
   await refreshState();
- }catch(error){message(error.message||"Could not submit your photo. Please try again.");}
- finally{button.disabled=false;button.textContent="Capture and submit photo";}
+ }catch(error){message((error.message||"Could not submit your photo.")+" You can retry without taking another photo.");}
+ finally{button.disabled=false;button.textContent=pendingUpload?"Retry photo upload":"Capture and submit photo";}
 });
 
 async function review(approved){
