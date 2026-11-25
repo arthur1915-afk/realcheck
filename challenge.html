@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#081321"><title>Live photo challenge — REALCHECK</title><link rel="stylesheet" href="styles.css"><link rel="icon" href="icon.svg" type="image/svg+xml"></head>
+<body class="account-page">
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">R</span> REAL<span>CHECK</span></a><div class="top-actions"><a class="btn btn-quiet" href="./connections.html">Connections</a></div></header>
+<main class="account-main"><section class="account-card pose-card">
+  <div class="eyebrow">MUTUAL REAL-PERSON CHECK</div><h1>Verify together<span>.</span></h1>
+  <p class="pose-intro">You and your connection receive the same random pose. Each of you submits a fresh photo, then reviews the other's photo. Chat unlocks only after both approvals.</p>
+  <div class="pose-status" id="poseStatus" role="status" aria-live="polite">Preparing your challenge…</div>
+  <section id="poseChallenge" hidden>
+    <div class="pose-attempt"><span id="poseAttempt">ATTEMPT 1 OF 3</span><strong id="poseTimer">20</strong></div>
+    <h2 id="posePrompt">Follow the pose shown here</h2>
+    <p class="pose-help">Keep your face visible, allow camera access and take a clear photo before the timer expires.</p>
+    <video id="poseVideo" autoplay muted playsinline></video>
+    <canvas id="poseCanvas" hidden></canvas>
+    <div class="pose-actions"><button class="btn btn-primary" id="capturePose" type="button">Capture and submit photo</button><a class="btn btn-quiet" href="./messages.html">Leave challenge</a></div>
+  </section>
+  <section id="poseReview" hidden>
+    <h2>Review your connection's photo</h2><p class="pose-help">Check that the photo clearly follows the requested pose. Approve only if it matches.</p>
+    <img id="otherSubmissionPhoto" alt="Your connection's submitted challenge photo">
+    <div class="pose-actions"><button class="btn btn-primary" id="approvePose" type="button">Approve photo</button><button class="btn btn-quiet" id="rejectPose" type="button">Does not match</button></div>
+  </section>
+  <section id="poseWaiting" hidden><h2>Waiting for the other review</h2><p class="pose-help">Your photo has been submitted. Chat remains locked until both people approve the other's photo.</p></section>
+  <a class="btn btn-quiet pose-back" id="returnToChat" href="#" hidden>Return to chat</a>
+</section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="challenge.js"></script></body></html>
