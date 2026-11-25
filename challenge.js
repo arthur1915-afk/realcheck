@@ -72,6 +72,12 @@ async function startCamera(){
 
 async function refreshState(){
  if(!user)return;
+ if(pendingUpload){
+  hideSections();el("poseChallenge").hidden=false;el("poseVideo").hidden=true;
+  el("capturePose").textContent="Retry photo upload";el("capturePose").disabled=false;
+  message("Your photo is registered but the upload is unfinished. Retry the same upload before continuing.");
+  return;
+ }
  if(!attempt){await loadAttempt();return;}
  const {data:session,error}=await client.from("realcheck_pose_sessions").select("status,current_attempt").eq("conversation_id",conversationId).maybeSingle();
  if(error)throw error;
