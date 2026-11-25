@@ -138,7 +138,11 @@ begin
       where id = v_attempt.id returning * into v_attempt;
   end if;
 
-  if now() >= v_attempt.expires_at then
+  -- Once both photos are submitted, the capture deadline no longer applies;
+  -- participants must be allowed to finish reviewing each other's photos.
+  if now() >= v_attempt.expires_at
+     and (select count(*) from public.realcheck_pose_submissions
+          where attempt_id = v_attempt.id) < 2 then
     update public.realcheck_pose_attempts set status='expired',completed_at=now()
     where id=v_attempt.id;
     if v_attempt.attempt_number >= 3 then
