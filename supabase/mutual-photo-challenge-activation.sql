@@ -220,9 +220,12 @@ as $$
     join public.realcheck_pose_sessions s on s.id=a.session_id
     where sub.photo_path=p_object_name
       and sub.user_id=auth.uid()
-      and a.status='active'
+      and a.status in ('active','expired')
       and s.status='active'
-      and now()<a.expires_at
+      -- A submission row can only be registered before the capture deadline.
+      -- Allow that already-registered photo to finish uploading after a transient
+      -- network failure, even if the attempt has since expired.
+      and sub.submitted_at <= a.expires_at
   );
 $$;
 
