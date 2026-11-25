@@ -175,7 +175,7 @@ begin
       (session_id, attempt_number, prompt_id, prompt_text, status, started_at, expires_at)
     values
       (v_session.id, v_attempt.attempt_number + 1, v_next_prompt.id,
-       v_next_prompt.prompt_text, 'active', now(), now() + interval '20 seconds');
+       v_next_prompt.prompt_text, 'active', now(), 'infinity'::timestamptz);
 
     return jsonb_build_object('status','next_attempt','attempt',v_attempt.attempt_number + 1,
       'prompt',v_next_prompt.prompt_text,'message','The previous attempt expired. A new shared prompt is ready.');
@@ -240,7 +240,7 @@ begin
       (session_id, attempt_number, prompt_id, prompt_text, status, started_at, expires_at)
     values
       (v_session.id, v_attempt.attempt_number + 1, v_next_prompt.id,
-       v_next_prompt.prompt_text, 'active', now(), now() + interval '20 seconds');
+       v_next_prompt.prompt_text, 'active', now(), 'infinity'::timestamptz);
 
     return jsonb_build_object('status','next_attempt','attempt',v_attempt.attempt_number + 1,
       'prompt',v_next_prompt.prompt_text);
