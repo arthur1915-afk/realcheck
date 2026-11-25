@@ -21,6 +21,10 @@ $$;
 revoke all on function public.realcheck_chat_is_unlocked(uuid) from public, anon;
 grant execute on function public.realcheck_chat_is_unlocked(uuid) to authenticated;
 
+alter table public.realcheck_pose_attempts
+  add column if not exists participant_a_ready_at timestamptz,
+  add column if not exists participant_b_ready_at timestamptz;
+
 create or replace function public.begin_realcheck_pose_challenge(p_conversation_id uuid)
 returns jsonb
 language plpgsql
@@ -96,12 +100,42 @@ begin
       (session_id,attempt_number,prompt_id,prompt_text,status,started_at,expires_at)
     values
       (v_session.id,v_session.current_attempt,v_prompt.id,v_prompt.prompt_text,
-       'active',now(),now()+interval '20 seconds')
+       'active',now(),'infinity'::timestamptz)
     returning * into v_attempt;
 
     update public.realcheck_pose_sessions
     set status='active', started_at=coalesce(started_at,now())
     where id=v_session.id;
+  end if;
+
+  -- Each participant must reach this same attempt before its 20-second clock starts.
+  if v_conversation.participant_a = v_user then
+    update public.realcheck_pose_attempts
+      set participant_a_ready_at = coalesce(participant_a_ready_at, now())
+      where id = v_attempt.id returning * into v_attempt;
+  else
+    update public.realcheck_pose_attempts
+      set participant_b_ready_at = coalesce(participant_b_ready_at, now())
+      where id = v_attempt.id returning * into v_attempt;
+  end if;
+
+  if v_attempt.participant_a_ready_at is null
+     or v_attempt.participant_b_ready_at is null then
+    return jsonb_build_object(
+      'status','waiting_for_partner',
+      'session_id',v_session.id,
+      'attempt_id',v_attempt.id,
+      'attempt',v_attempt.attempt_number,
+      'prompt_id',v_attempt.prompt_id,
+      'prompt',v_attempt.prompt_text,
+      'message','You are ready. Waiting for the other participant to join this attempt.'
+    );
+  end if;
+
+  if v_attempt.expires_at = 'infinity'::timestamptz then
+    update public.realcheck_pose_attempts
+      set started_at = now(), expires_at = now() + interval '20 seconds'
+      where id = v_attempt.id returning * into v_attempt;
   end if;
 
   if now() >= v_attempt.expires_at then
@@ -147,13 +181,15 @@ begin
   if v_user is null then raise exception 'Please sign in first.'; end if;
   select * into v_attempt from public.realcheck_pose_attempts
   where id=p_attempt_id for update;
-  if not found or v_attempt.status <> 'active' or now() >= v_attempt.expires_at then
+  if not found or v_attempt.status <> 'active' or v_attempt.expires_at = 'infinity'::timestamptz or now() >= v_attempt.expires_at then
     raise exception 'This challenge has expired. Start the next attempt.';
   end if;
   select * into v_session from public.realcheck_pose_sessions
   where id=v_attempt.session_id for update;
   if v_user not in (v_session.participant_a,v_session.participant_b)
-     or v_session.status <> 'active' then
+     or v_session.status <> 'active'
+     or v_attempt.participant_a_ready_at is null
+     or v_attempt.participant_b_ready_at is null then
     raise exception 'You are not allowed to submit to this challenge.';
   end if;
   if p_photo_path !~ ('^' || v_user::text || '/' || v_session.id::text || '/' || v_attempt.id::text || '/[^/]+[.](jpg|jpeg|png|webp)$') then
