@@ -156,7 +156,7 @@ begin
      or v_session.status <> 'active' then
     raise exception 'You are not allowed to submit to this challenge.';
   end if;
-  if p_photo_path !~ ('^' || v_user::text || '/' || v_session.id::text || '/' || v_attempt.id::text || '/[^/]+\\.(jpg|jpeg|png|webp)$') then
+  if p_photo_path !~ ('^' || v_user::text || '/' || v_session.id::text || '/' || v_attempt.id::text || '/[^/]+[.](jpg|jpeg|png|webp)$') then
     raise exception 'Invalid private photo path.';
   end if;
   insert into public.realcheck_pose_submissions(attempt_id,user_id,photo_path)
