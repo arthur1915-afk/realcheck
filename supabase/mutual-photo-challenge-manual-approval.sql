@@ -139,7 +139,11 @@ begin
     raise exception 'This challenge attempt is no longer active.';
   end if;
 
-  if now() >= v_attempt.expires_at then
+  -- The 20-second limit applies to capturing both photos, not to the
+  -- participants' time to review photos that were already submitted.
+  if now() >= v_attempt.expires_at
+     and (select count(*) from public.realcheck_pose_submissions
+          where attempt_id = v_attempt.id) < 2 then
     update public.realcheck_pose_attempts set status = 'expired', completed_at = now()
       where id = v_attempt.id;
     update public.realcheck_pose_submissions
