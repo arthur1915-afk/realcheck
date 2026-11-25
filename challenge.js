@@ -39,7 +39,18 @@ async function loadAttempt(){
  const {data:other,error:otherError}=await client.from("realcheck_pose_submissions").select("id,photo_path,review_status").eq("attempt_id",data.attempt_id).neq("user_id",user.id).maybeSingle();
  if(otherError)throw otherError;
  if(mine){
-  stopCamera();hideSections();
+  stopCamera();
+  if(pendingUpload && pendingUpload.attemptId===data.attempt_id){
+   // Keep the retry action visible while the registered photo is still uploading.
+   hideSections();el("poseChallenge").hidden=false;
+   el("poseVideo").hidden=true;
+   el("capturePose").textContent="Retry photo upload";
+   el("capturePose").disabled=false;
+   message("Your photo is registered but has not finished uploading. Retry the upload; you do not need to take another photo.");
+   return;
+  }
+  el("poseVideo").hidden=false;
+  hideSections();
   if(other && other.review_status==="pending" && !reviewing){
    const url=await signedPhoto(other.photo_path);el("otherSubmissionPhoto").src=url;el("poseReview").hidden=false;el("approvePose").dataset.submissionId=other.id;el("rejectPose").dataset.submissionId=other.id;
    message("Both photos are submitted. Review your connection's photo.");
