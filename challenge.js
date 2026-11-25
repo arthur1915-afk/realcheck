@@ -31,7 +31,7 @@ async function loadAttempt(){
  if(otherError)throw otherError;
  if(mine){
   stopCamera();hideSections();
-  if(other && !reviewing){
+  if(other && other.review_status==="pending" && !reviewing){
    const url=await signedPhoto(other.photo_path);el("otherSubmissionPhoto").src=url;el("poseReview").hidden=false;el("approvePose").dataset.submissionId=other.id;el("rejectPose").dataset.submissionId=other.id;
    message("Both photos are submitted. Review your connection's photo.");
   }else{
